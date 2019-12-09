@@ -18,3 +18,5 @@ for i in range(0, T-1):
     
 with open('graphs.json', 'w') as f:
     f.write(dumps(result, indent=4))
+
+    
