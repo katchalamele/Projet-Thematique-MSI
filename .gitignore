@@ -5,4 +5,3 @@ simulator/__pycache__/
 simulator/*.txt
 couplesManager/__pycache__/
 simulator/ttl stat
-*.txt

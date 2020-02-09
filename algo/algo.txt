@@ -1,0 +1,54 @@
+NOW: date à l'instant
+STOCK: les messages à transmettre
+P = Intervalle de temps entre chaque vérification de STOCK 
+MOI = UUID
+ID = id unique du message
+TTL = nombre de sauts
+DEXP = Date d'expiration
+EXP = Expéditeur
+DEST = Destinataire
+CRP = Corps du message
+DATE = Date d'envoie d'un message
+
+Envoie d'un nouveau message:
+    Nouveau message M:
+        M.DATE = NOW
+        M.TTL = 50
+        M.DEXP = NOW + 7 Jours
+        M.EXP = Moi
+        M.DEST = UUID du destinataire
+        M.CRP = Ecrire du texte
+    Enregistrer M dans STOCK
+
+
+À la réception d'un message M:
+    Pour chaque message M1 dans STOCK:
+        Si M1.DEST = M.DEST ET M1.DATE = M.DATE:
+            Supprimer M
+            Fin de l'algo
+        Fin si
+    Fin pour
+    Si M.DEST = MOI:
+        Enregistrer M dans STOCK
+        Lire M
+        Fin de l'algo
+    Fin si
+    Si M.TTL = 0 ou M.DEXP > NOW:
+        Supprimer M
+        Fin de l'algo
+    Sinon:
+        M.TTL = M.TTL - 1
+        Enregistrer M dans STOCK
+    Fin si
+
+
+À la connexion avec un appareil A du réseau:
+    Pour chaque message M1 dans STOCK:
+        Envoyer M1 à A
+
+Chaque P temps, faire:
+    Pour chaque message M dans STOCK:
+        Si M.DEXP > NOW:
+            Supprimer M
+        Fin si
+    Fin pour
