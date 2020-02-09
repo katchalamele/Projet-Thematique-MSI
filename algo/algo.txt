@@ -10,6 +10,7 @@ DEST = Destinataire
 CRP = Corps du message
 DATE = Date d'envoie d'un message
 
+
 Envoie d'un nouveau message:
     Nouveau message M:
         M.DATE = NOW
@@ -33,18 +34,19 @@ Envoie d'un nouveau message:
         Lire M
         Fin de l'algo
     Fin si
-    Si M.TTL = 0 ou M.DEXP > NOW:
-        Supprimer M
-        Fin de l'algo
-    Sinon:
-        M.TTL = M.TTL - 1
-        Enregistrer M dans STOCK
-    Fin si
+    M.TTL = M.TTL - 1
+    Enregistrer M dans STOCK
 
 
 À la connexion avec un appareil A du réseau:
-    Pour chaque message M1 dans STOCK:
-        Envoyer M1 à A
+    Pour chaque message M dans STOCK:
+        Si M.TTL = 1:
+            Si M.DEST = A:
+                Envoyer M à
+            Fin si
+        Sinon:
+            Envoyer M à A
+
 
 Chaque P temps, faire:
     Pour chaque message M dans STOCK:
