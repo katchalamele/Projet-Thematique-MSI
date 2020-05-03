@@ -14,42 +14,38 @@ c = Canvas(root, height=TAILLE, width=TAILLE)
 c.pack()
 
 particules = ()
-lieux_travail = ()
-lieux_pause = ()
+lieux = ()
 lieux_domiciles = ()
 
 derniers_croisements = ()
 
-for i in range(1, NBLIEUX_T+1):
-    lt = Lieu(i, "Travail", "Travail"+str(i))
-    lieux_travail += lt,
-    lt.draw(c)
+clock = 0
+step = 1
 
-for i in range(1, NBLIEUX_P+1):
-    lp = Lieu(i, "Pause", "Pause"+str(i))
-    lieux_pause += lp,
-    lp.draw(c)
+for i in range(1, NBLIEUX+1):
+    lt = Lieu(i, "Lieu Abstrait", "Lieu"+str(i))
+    lieux += lt,
+    lt.draw(c)
     
 
 for i in range(1, EFFECTIF+1):
     p = Particule(i)
     ld = Lieu(i, "Domicile", "Domicile"+str(i), p.x, p.y)
+    p.home = ld
 
     particules += p,
     lieux_domiciles += ld,
 
-    p.draw(c)
     ld.draw(c)
-    p.goto(choice(lieux_travail))
+    p.draw(c)
+    p.goto(choice(lieux))
 
-    if(random() < 0.5):
-        p.createMsg(choice(particules).uuid, "Message")
+    if(random() < PCM):
+        p.createMsg(choice(particules).uuid, "Message", clock+DVM)
 
 
 root.update_idletasks()
 root.update()
-
-b = 0
 
 while True:
     croisements = ()
@@ -62,16 +58,30 @@ while True:
                 if not croisement in croisements:
                     croisements += croisement,
                     if not croisement in derniers_croisements:    
-                        print('Distance entre', p.uuid, 'et', p2.uuid, '=', d)
+                        print('noeuds', p.uuid, 'et', p2.uuid, 'se croisent')
                         p.send_all(p2)
     derniers_croisements = croisements
 
-    b+=DELAY
-    if b%10 < 0.05 and not any([(not p.standby) for p in particules]):
-        print("deede")
+    clock+=DELAY
+
+    if clock%10 < DELAY and not any([(not p.standby) for p in particules]):
+        step+=1
+        print("####STEP", step, "  Clock:", round(clock)," ####")
         for p in particules:
-            p.goto(choice(lieux_pause))
-            p.standby=False
+            #Suppression de messages expirés
+            p.remove_exp_msg(clock)
+            
+            #Creation de nouveaux messages
+            if(random() < 0.1):
+                p.createMsg(choice(particules).uuid, "Message", clock+DVM)
+
+        if step%5 == 0:
+            for p in particules:
+                p.go_home()
+        else:
+            for p in particules:
+                p.goto(choice(lieux))
+                p.standby=False
 
 
     

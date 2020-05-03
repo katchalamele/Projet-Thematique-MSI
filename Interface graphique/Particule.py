@@ -24,6 +24,7 @@ class Particule:
         self.capacity = capacity
         self.battery = battery
         self.power = battery
+        self.home = None
 
     def draw(self, canvas):
         self.circle = canvas.create_oval(self.x - R, self.y - R, self.x + R, self.y + R, fill = self.color), canvas.create_text(self.x, self.y, text=str(self.uuid), fill='white')        
@@ -48,9 +49,12 @@ class Particule:
         self.target = lieu
         self.standby = False
     
+    def go_home(self):
+        self.goto(self.home)
+    
 
-    def createMsg(self, dest, text):
-        msg = Message(self.uuid, dest, text, 50)
+    def createMsg(self, dest, text, dexp):
+        msg = Message(self.uuid, dest, text, dexp)
         self.messages.append(msg)
         print("noeud", self.uuid, "ecrit au noeud", dest, "un Nouveau message", msg.uuid)
         
@@ -67,6 +71,7 @@ class Particule:
                      if not msg.isOk:
                          recept += 1
                          msg.isOk = True
+                         print("neoud", self.uuid, "a recu le message", msg.uuid, "provennt de", msg.src)
                 self.messages.append(msg)
     
     def send_all(self, dst):
@@ -74,3 +79,8 @@ class Particule:
             if msg.ttl-1 > 0:
                 dst.receive(deepcopy(msg))
                 print("noeud", self.uuid, "envoie", msg.uuid, "au noeud", dst.uuid)
+    
+    def remove_exp_msg(self, clock):
+        for msg in self.messages:
+            if msg.dexp <= clock:
+                self.messages.remove(msg)

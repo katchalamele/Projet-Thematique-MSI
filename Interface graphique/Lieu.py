@@ -2,7 +2,7 @@
 
 from random import randint
 from lib import random_hex_color
-from Params import *
+from Params import TAILLE,RL
 
 class Lieu:
     
@@ -21,8 +21,6 @@ class Lieu:
 
     def draw(self, canvas):
         if self.type == "Domicile":
-            self.circle = canvas.create_rectangle(self.x - (RB/3), self.y - (RB/3), self.x + (RB/3), self.y + (RB/3), fill='blue'), canvas.create_text(self.x, self.y, text=str(self.frlib), fill='black')            
-        if self.type == "Travail":
-            self.circle = canvas.create_oval(self.x - RB, self.y - RB, self.x + RB, self.y + RB, fill='white'), canvas.create_text(self.x, self.y, text=str(self.frlib), fill='black')        
-        if self.type == "Pause":
-            self.circle = canvas.create_oval(self.x - RB, self.y - RB, self.x + RB, self.y + RB, fill='white'), canvas.create_text(self.x, self.y, text=str(self.frlib), fill='black')        
+            self.circle = canvas.create_rectangle(self.x - (RL/3), self.y - (RL/3), self.x + (RL/3), self.y + (RL/3), fill='blue'), canvas.create_text(self.x, self.y, text=str(self.frlib), fill='black')            
+        else:
+            self.circle = canvas.create_oval(self.x - RL, self.y - RL, self.x + RL, self.y + RL, fill='white'), canvas.create_text(self.x, self.y, text=str(self.frlib), fill='black')       
