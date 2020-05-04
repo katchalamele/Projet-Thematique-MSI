@@ -22,12 +22,14 @@ derniers_croisements = ()
 clock = 0
 step = 1
 
+# Création des Lieux
 for i in range(1, NBLIEUX+1):
     lt = Lieu(i, "Lieu Abstrait", "Lieu"+str(i))
     lieux += lt,
     lt.draw(c)
     
 
+# Création des Noeuds et de leurs domiciles et creation des premiers messaegs
 for i in range(1, EFFECTIF+1):
     p = Particule(i)
     ld = Lieu(i, "Domicile", "Domicile"+str(i), p.x, p.y)
@@ -61,6 +63,7 @@ while True:
                         #P ET P2 se croisent    
                         print('noeuds', p.uuid, 'et', p2.uuid, 'se croisent')
                         p.send_all(p2)
+                        p2.send_all(p)
     derniers_croisements = croisements
 
     clock+=DELAY
