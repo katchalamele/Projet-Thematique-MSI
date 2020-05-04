@@ -1,4 +1,4 @@
-#Auteur: KATCHALA MELE Daouda
+#Auteurs: Groupe MSI
 
 from random import randint
 from Vector import Vector
