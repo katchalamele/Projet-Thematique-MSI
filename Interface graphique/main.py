@@ -57,7 +57,8 @@ while True:
                 croisement = {p.uuid, p2.uuid}
                 if not croisement in croisements:
                     croisements += croisement,
-                    if not croisement in derniers_croisements:    
+                    if not croisement in derniers_croisements:
+                        #P ET P2 se croisent    
                         print('noeuds', p.uuid, 'et', p2.uuid, 'se croisent')
                         p.send_all(p2)
     derniers_croisements = croisements

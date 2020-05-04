@@ -3,7 +3,7 @@
 from random import randint
 from Vector import Vector
 from lib import random_hex_color,distance
-from Params import *
+from Params import TAILLE,MMD,DC,R,CP,BT
 from message import Message
 from copy import deepcopy
 
@@ -11,7 +11,7 @@ recept = 0
 
 class Particule:
     
-    def __init__(self, uuid, capacity=50, battery=50):
+    def __init__(self, uuid, capacity=CP, battery=BT):
         self.uuid = uuid
         self.x = randint(0, TAILLE)
         self.y = randint(0, TAILLE)

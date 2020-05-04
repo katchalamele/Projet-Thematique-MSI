@@ -17,3 +17,5 @@ DC = 20          # Distance maximale de croisement
 TTL = 3          # Time to live
 DVM = 120        # Durée de vie des Messages
 PCM = 0.2        # Probabilité de création de message (1 => 100%)
+CP = 50          # Capacités des noeuds
+BT = 50          # Batteries initiales des noeuds
