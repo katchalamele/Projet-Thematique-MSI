@@ -1,5 +1,5 @@
 #### Parametres d'effectifs ####
-EFFECTIF = 10    # Nombre de particules
+EFFECTIF = 20    # Nombre de particules
 NBLIEUX = 5      # Nombre de Lieux Abstraits
 
 #### Parametres d'affichage ####
