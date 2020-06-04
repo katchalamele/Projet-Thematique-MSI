@@ -2,8 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 # use ggplot style for more sophisticated visuals
-#plt.style.use('ggplot')
-plt.style.use('classic')
+plt.style.use('ggplot')
 
 def live_plotter(x_vec,y1_data,line1,identifier='',pause_time=0.1):
     if line1==[]:
@@ -24,7 +23,19 @@ def live_plotter(x_vec,y1_data,line1,identifier='',pause_time=0.1):
     if np.min(y1_data)<=line1.axes.get_ylim()[0] or np.max(y1_data)>=line1.axes.get_ylim()[1]:
         plt.ylim([np.min(y1_data)-np.std(y1_data),np.max(y1_data)+np.std(y1_data)])
     # this pauses the data so the figure/axis can catch up - the amount of pause can be altered above
-    #plt.pause(pause_time)
+    plt.pause(pause_time)
     
     # return line so we can update it again in the next iteration
     return line1
+
+size = 1000
+x_vec = np.linspace(0,1,size+1)[0:-1]
+y_vec = np.random.randn(len(x_vec))
+line1 = []
+
+val = 0
+while True:
+    val += 1#np.random.randn(1)
+    y_vec[-1] = val
+    line1 = live_plotter(x_vec,y_vec,line1)
+    y_vec = np.append(y_vec[1:],0.0)

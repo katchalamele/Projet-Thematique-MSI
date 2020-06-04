@@ -5,8 +5,7 @@ from time import sleep
 from lib import distance
 from Params import *
 from random import choice,random
-from pylive import live_plotter
-import numpy as np
+from Compteur import Compteur
 
 root = Tk()
 root.geometry(str(TAILLE) + 'x' + str(TAILLE))
@@ -14,7 +13,7 @@ root.geometry(str(TAILLE) + 'x' + str(TAILLE))
 c = Canvas(root, height=TAILLE, width=TAILLE)
     
 c.pack()
-
+cpt = Compteur()
 particules = ()
 lieux = ()
 lieux_domiciles = ()
@@ -47,16 +46,11 @@ for i in range(1, EFFECTIF+1):
 
     if(random() < PCM):
         p.createMsg(choice(particules).uuid, "Message", clock+DVM)
+        cpt.incr_envoyes()
 
 
 root.update_idletasks()
 root.update()
-
-
-size = 500
-x_vec = np.linspace(0,1,size+1)[0:-1]
-y_vec = [0 for i in range(len(x_vec))]#np.random.randn(len(x_vec))
-line1 = []
 
 
 while True:
@@ -72,16 +66,14 @@ while True:
                     if not croisement in derniers_croisements:
                         #P ET P2 se croisent    
                         print('noeuds', p.uuid, 'et', p2.uuid, 'se croisent')
-                        nb_croisements += 1
-                        p.send_all(p2)
-                        p2.send_all(p)
+                        cpt.incr_croisements()
+                        p.send_all(p2, cpt)
+                        p2.send_all(p, cpt)
     derniers_croisements = croisements
 
     clock+=DELAY
 
-    y_vec[-1] = nb_croisements
-    line1 = live_plotter(x_vec,y_vec,line1)
-    y_vec = np.append(y_vec[1:],0.0)
+    cpt.step()
 
     """ if clock%10 < DELAY and not any([(not p.standby) for p in particules]):
         step+=1
@@ -112,6 +104,7 @@ while True:
             #Creation de nouveaux messages
             if(random() < 0.1):
                 p.createMsg(choice(particules).uuid, "Message", clock+DVM)
+                cpt.incr_envoyes()
 
             if p.standby:
                 if(random() < 0.2):

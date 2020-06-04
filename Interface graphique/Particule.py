@@ -59,7 +59,7 @@ class Particule:
         print("noeud", self.uuid, "ecrit au noeud", dest, "un Nouveau message", msg.uuid)
         
     
-    def receive(self, msg):
+    def receive(self, msg, cpt):
         global recept
         if len(self.messages)+1 < self.capacity:
             msg.ttl = msg.ttl - 1
@@ -72,12 +72,13 @@ class Particule:
                          recept += 1
                          msg.isOk = True
                          print("neoud", self.uuid, "a recu le message", msg.uuid, "provennt de", msg.src)
+                         cpt.incr_recus()
                 self.messages.append(msg)
     
-    def send_all(self, dst):
+    def send_all(self, dst, cpt):
         for msg in self.messages:
             if msg.ttl-1 > 0:
-                dst.receive(deepcopy(msg))
+                dst.receive(deepcopy(msg), cpt)
                 print("noeud", self.uuid, "envoie", msg.uuid, "au noeud", dst.uuid)
     
     def remove_exp_msg(self, clock):
