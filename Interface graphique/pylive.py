@@ -10,7 +10,7 @@ ax1 = fig.add_subplot(2,2,1)
 ax2 = fig.add_subplot(2,2,2)
 ax3 = fig.add_subplot(2,2,3)
 
-def live_plotter(x_vec,y1_data,y2_data,y3_data,y4_data,line1,line2,line3,line4,pause_time=0.1):
+def live_plotter(x_vec,y1_data,y2_data,y3_data,y4_data,line1,line2,line3,line4,pause_time=0.0001):
     if line1==[]:
         # create a variable for the line so we can later update it
         line1, = ax1.plot(x_vec,y1_data, linewidth=5)
@@ -38,7 +38,7 @@ def live_plotter(x_vec,y1_data,y2_data,y3_data,y4_data,line1,line2,line3,line4,p
     if np.min(y4_data)<=line4.axes.get_ylim()[0] or np.max(y4_data)>=line4.axes.get_ylim()[1]:
         ax3.set_ylim([np.min(y4_data)-np.std(y4_data),np.max(y4_data)+np.std(y4_data)])
     # this pauses the data so the figure/axis can catch up - the amount of pause can be altered above
-    #plt.pause(pause_time)
+    plt.pause(pause_time)
     
     # return line so we can update it again in the next iteration
     return line1,line2,line3,line4
