@@ -102,7 +102,7 @@ while True:
             p.remove_exp_msg(clock)
             
             #Creation de nouveaux messages
-            if(random() < 0.1):
+            if(random() < PCM):
                 p.createMsg(choice(particules).uuid, "Message", clock+DVM)
                 cpt.incr_envoyes()
 
