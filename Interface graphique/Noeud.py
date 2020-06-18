@@ -7,9 +7,7 @@ from Params import TAILLE,MMD,DC,R,CP,BT
 from message import Message
 from copy import deepcopy
 
-recept = 0
-
-class Particule:
+class Noeud:
     
     def __init__(self, uuid, capacity=CP, battery=BT):
         self.uuid = uuid
@@ -25,6 +23,7 @@ class Particule:
         self.battery = battery
         self.power = battery
         self.home = None
+        self.cpt = None
 
     def draw(self, canvas):
         self.circle = canvas.create_oval(self.x - R, self.y - R, self.x + R, self.y + R, fill = self.color), canvas.create_text(self.x, self.y, text=str(self.uuid), fill='white')        
@@ -56,11 +55,11 @@ class Particule:
     def createMsg(self, dest, text, dexp):
         msg = Message(self.uuid, dest, text, dexp)
         self.messages.append(msg)
-        print("noeud", self.uuid, "ecrit au noeud", dest, "un Nouveau message", msg.uuid)
+        self.cpt.incr_satur_reseau()
+        self.cpt.logger.info("Nouveau message "+str(msg.uuid)+":  "+str(self.uuid)+" =======> "+str(dest))
         
     
-    def receive(self, msg, cpt):
-        global recept
+    def receive(self, msg):
         if len(self.messages)+1 < self.capacity:
             msg.ttl = msg.ttl - 1
             if (msg.ttl > 0) or (msg.dst == self.uuid):
@@ -68,20 +67,20 @@ class Particule:
                     if (m.uuid == msg.uuid):
                         return
                 if msg.dst == self.uuid:
-                     if not msg.isOk:
-                         recept += 1
-                         msg.isOk = True
-                         print("neoud", self.uuid, "a recu le message", msg.uuid, "provennt de", msg.src)
-                         cpt.incr_recus()
+                    self.cpt.logger.info(str(self.uuid)+": Réception de message "+str(msg.uuid)+" provenant de "+str(msg.src))
+                    msg.isOk = True
+                    self.cpt.incr_recus()
+                self.cpt.incr_satur_reseau()
                 self.messages.append(msg)
     
-    def send_all(self, dst, cpt):
+    def send_all(self, dst):
         for msg in self.messages:
-            if msg.ttl-1 > 0:
-                dst.receive(deepcopy(msg), cpt)
-                print("noeud", self.uuid, "envoie", msg.uuid, "au noeud", dst.uuid)
+            if msg.ttl-1 > 0 and not msg.isOk:
+                dst.receive(deepcopy(msg))
+                #print("noeud", self.uuid, "envoie", msg.uuid, "au noeud", dst.uuid)
     
     def remove_exp_msg(self, clock):
         for msg in self.messages:
             if msg.dexp <= clock:
                 self.messages.remove(msg)
+                self.cpt.decr_satur_reseau()

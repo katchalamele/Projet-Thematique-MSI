@@ -40,12 +40,10 @@ Envoie d'un nouveau message:
 
 À la connexion avec un appareil A du réseau:
     Pour chaque message M dans STOCK:
-        Si M.TTL = 1:
-            Si M.DEST = A:
-                Envoyer M à
-            Fin si
-        Sinon:
-            Envoyer M à A
+        Si M.TTL < 1 et M.DEST = MOI:
+            Envoyer M à
+        Fin si
+    Fin pour
 
 
 Chaque P temps, faire:
