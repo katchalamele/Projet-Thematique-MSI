@@ -1,6 +1,8 @@
 *.png
 *.json
 *.pyc
+*.log
+*.png
 simulator/__pycache__/
 simulator/*.txt
 couplesManager/__pycache__/

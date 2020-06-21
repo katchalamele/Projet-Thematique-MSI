@@ -62,7 +62,7 @@ class Noeud:
     def receive(self, msg):
         if len(self.messages)+1 < self.capacity:
             msg.ttl = msg.ttl - 1
-            if (msg.ttl > 0) or (msg.dst == self.uuid):
+            if (msg.ttl -1 > 0) or (msg.dst == self.uuid):
                 for m in self.messages:
                     if (m.uuid == msg.uuid):
                         return
