@@ -20,6 +20,7 @@ DT = 600         # Durée totale de simulation
 LEM = 300        # Limite d'envoie des messages (secondes après lesquelles on envoie plus de message)
 DC = 2          # Distance maximale de croisement
 
+#### Paramètres à afficher sur la fenêtre des courbes ####
 Params = {
     'EFFECTIF' : EFFECTIF,
     'NBLIEUX' : NBLIEUX,
